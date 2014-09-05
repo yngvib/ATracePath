@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.List;
+
 public class Board extends View {
 
     private final int NUM_CELLS = 5;
@@ -16,6 +18,8 @@ public class Board extends View {
     private Paint m_paintGrid  = new Paint();
     private Paint m_paintPath  = new Paint();
     private Path m_path = new Path();
+
+    private Cellpath m_cellPath = new Cellpath();
 
     private int xToCol( int x ) {
         return (x - getPaddingLeft()) / m_cellWidth;
@@ -40,8 +44,11 @@ public class Board extends View {
         m_paintGrid.setColor( Color.GRAY );
 
         m_paintPath.setStyle( Paint.Style.STROKE );
-        m_paintPath.setColor( Color.GREEN );
-        m_paintPath.setStrokeWidth( 8 );
+        m_paintPath.setColor(Color.GREEN);
+        m_paintPath.setStrokeWidth(32);
+        m_paintPath.setStrokeCap( Paint.Cap.ROUND );
+        m_paintPath.setStrokeJoin( Paint.Join.ROUND );
+        m_paintPath.setAntiAlias( true );
     }
 
     @Override
@@ -64,15 +71,48 @@ public class Board extends View {
     @Override
     protected void onDraw( Canvas canvas ) {
 
+        for ( int r=0; r<NUM_CELLS; ++r ) {
+            for (int c = 0; c<NUM_CELLS; ++c) {
+                int x = colToX( c );
+                int y = rowToY( r );
+                m_rect.set(x, y, x + m_cellWidth, y + m_cellHeight);
+                canvas.drawRect( m_rect, m_paintGrid );
+            }
+        }
+        m_path.reset();
+        if ( !m_cellPath.isEmpty() ) {
+            List<Coordinate> colist = m_cellPath.getCoordinates();
+            Coordinate co = colist.get( 0 );
+            m_path.moveTo( colToX(co.getCol()) + m_cellWidth / 2,
+                           rowToY(co.getRow()) + m_cellHeight / 2 );
+            for ( int i=1; i<colist.size(); ++i ) {
+                co = colist.get(i);
+                m_path.lineTo( colToX(co.getCol()) + m_cellWidth / 2,
+                                rowToY(co.getRow()) + m_cellHeight / 2 );
+            }
+        }
+        canvas.drawPath( m_path, m_paintPath);
     }
-
 
     @Override
     public boolean onTouchEvent( MotionEvent event ) {
 
         int x = (int) event.getX();         // NOTE: event.getHistorical... might be needed.
         int y = (int) event.getY();
+        int c = xToCol( x );
+        int r = yToRow( y );
 
+        if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
+            //m_path.reset();
+            //m_path.moveTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
+            m_cellPath.reset();
+            m_cellPath.append( new Coordinate(c,r) );
+        }
+        else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
+            //m_path.lineTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
+            m_cellPath.append( new Coordinate(c,r) );
+            invalidate();
+        }
         return true;
     }
 
