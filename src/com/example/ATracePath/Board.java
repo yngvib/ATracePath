@@ -94,6 +94,10 @@ public class Board extends View {
         canvas.drawPath( m_path, m_paintPath);
     }
 
+    private boolean areNeighbours( int c1, int r1, int c2, int r2 ) {
+        return Math.abs(c1-c2) + Math.abs(r1-r2) == 1;
+    }
+
     @Override
     public boolean onTouchEvent( MotionEvent event ) {
 
@@ -101,6 +105,10 @@ public class Board extends View {
         int y = (int) event.getY();
         int c = xToCol( x );
         int r = yToRow( y );
+
+        if ( c >= NUM_CELLS || r >= NUM_CELLS ) {
+            return true;
+        }
 
         if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
             //m_path.reset();
@@ -110,8 +118,14 @@ public class Board extends View {
         }
         else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
             //m_path.lineTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
-            m_cellPath.append( new Coordinate(c,r) );
-            invalidate();
+            if ( !m_cellPath.isEmpty() ) {
+                List<Coordinate> coordinateList = m_cellPath.getCoordinates();
+                Coordinate last = coordinateList.get(coordinateList.size()-1);
+                if ( areNeighbours(last.getCol(),last.getRow(), c, r)) {
+                    m_cellPath.append(new Coordinate(c, r));
+                    invalidate();
+                }
+            }
         }
         return true;
     }
