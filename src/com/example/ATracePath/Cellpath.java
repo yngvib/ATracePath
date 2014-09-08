@@ -1,5 +1,7 @@
 package com.example.ATracePath;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
