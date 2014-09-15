@@ -20,13 +20,16 @@ public class MainActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
-    List<Pack> mPacks = new ArrayList<Pack>();
+    private Global mGlobals = Global.getInstance();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         try {
-            readPack(getAssets().open("packs/packs.xml"), mPacks);
+            List<Pack> packs = new ArrayList<Pack>();
+            readPack(getAssets().open("packs/packs.xml"), packs);
+            mGlobals.mPacks = packs;
         }
         catch ( Exception e ) {
             e.printStackTrace();
