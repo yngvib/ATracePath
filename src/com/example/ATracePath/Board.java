@@ -117,7 +117,7 @@ public class Board extends View {
             m_cellPath.append( new Coordinate(c,r) );
         }
         else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
-            //m_path.lineTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
+             //m_path.lineTo( colToX(c) + m_cellWidth / 2, rowToY(r) + m_cellHeight / 2 );
             if ( !m_cellPath.isEmpty() ) {
                 List<Coordinate> coordinateList = m_cellPath.getCoordinates();
                 Coordinate last = coordinateList.get(coordinateList.size()-1);
