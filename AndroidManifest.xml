@@ -14,5 +14,6 @@
         </activity>
         <activity android:name=".PlayActivity"/>
         <activity android:name=".ColorListActivity" android:label="Colors"/>
+        <activity android:name=".SettingsActivity" android:label="Settings"/>
     </application>
 </manifest>

@@ -45,6 +45,9 @@ public class MainActivity extends Activity {
         else if ( id == R.id.button_color ) {
             startActivity( new Intent( this, ColorListActivity.class ) );
         }
+        else if ( id == R.id.button_settings ) {
+            startActivity( new Intent( this, SettingsActivity.class ) );
+        }
     }
 
     private void readPack( InputStream is, List<Pack> packs) {

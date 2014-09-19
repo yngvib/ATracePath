@@ -1,7 +1,9 @@
 package com.example.ATracePath;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.*;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +51,10 @@ public class Board extends View {
         m_paintPath.setStrokeCap( Paint.Cap.ROUND );
         m_paintPath.setStrokeJoin( Paint.Join.ROUND );
         m_paintPath.setAntiAlias( true );
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        Boolean labelsOn = pref.getBoolean("board_labels",false );
+        System.out.println( "Are labels on: " + labelsOn );
     }
 
     @Override
